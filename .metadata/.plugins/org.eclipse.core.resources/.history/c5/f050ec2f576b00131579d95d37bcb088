@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package com.indexing.inverted;
+
+/**
+ * @author amol
+ *
+ */
+public class Loader {
+
+	/**
+	 * 
+	 */
+	public Loader() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

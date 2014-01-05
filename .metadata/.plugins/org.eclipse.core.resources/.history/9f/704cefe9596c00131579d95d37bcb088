@@ -1,0 +1,98 @@
+/**
+ * 
+ */
+package com.indexing.inverted;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author amol
+ *
+ */
+public class Loader {
+	
+	
+	/*
+	 *  Variables
+	 */
+	
+	private List<File> listOfAllFilesToBeIndexed = new ArrayList<File>();
+	
+	
+	/**
+	 *  Default Constructor
+	 */
+	public Loader() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public void load (File file)
+	{
+		/*
+		 * check if the file is null; else add the file to the list of files that are to be parsed.
+		 */
+		if(file == null)
+		{
+			return;
+		}
+		
+		else if(file.isFile())
+		{
+			listOfAllFilesTo.add(file);
+		}
+		
+		else
+		{
+			/*
+			 * Call a depth search method that finds files and add hem to the list of files
+			 */
+			discoverFiles(file);
+		}
+	}
+	
+	
+	/**
+	 * depth search
+	 * 
+	 * @param dir
+	 */
+	private void discoverFiles(File dir) 
+	{
+		if (dir == null || dir.isFile())
+			return;
+
+		File[] dirs = dir.listFiles
+				(new FileFilter() {
+
+			@Override
+			public boolean accept(File file) {
+				if (file.isFile())
+					listOfAllFilesTo.add(file);
+				else if (file.getName().startsWith("."))
+					; // ignore
+				else if (file.isDirectory()) {
+					discoverFiles(file);
+				}
+
+				return false;
+			}
+		});
+	}
+	
+	
+	public void gatherData()
+	{
+		
+		/* 
+		 *  Parallel run the code to read through all the books and create the objects 
+		 *  of index and then use it to create the inverted index
+		 */
+		
+		ArrayList<Document> r = new ArrayList<Document>(listOf .size());
+	}
+	
+
+}

@@ -1,0 +1,23 @@
+/**
+ * 
+ */
+package com.indexing.stopwords;
+
+/**
+ * @author amol
+ *
+ */
+public interface Stopwords {
+	
+	
+	import java.io.File;
+
+	public interface StopWords {
+
+		boolean contains(String word);
+
+		void init(File swf) throws Exception;
+
+	}
+
+}

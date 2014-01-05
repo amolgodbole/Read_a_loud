@@ -1,0 +1,35 @@
+/*
+ * 
+ */
+package com.indexing.stopwords;
+
+/*
+ * 
+ * Words which have no place in this term-concept mapping are those which
+ * describe no concepts. The particle words of grammar, the, of, and ..., known
+ * in IR as stopwords, fall into this category. Stopwords can be useful for
+ * retrieval but only in searching for phrases (see
+ * http://snowball.tartarus.org/texts/introduction.html)
+ * 
+ * Sources:
+ * <ul>
+ * <li>http://www.ranks.nl/resources/stopwords.html
+ * <li>http://www.lextek.com/manuals/onix/stopwords1.html
+ * </ul>
+ * 
+ * @author gash1
+ * 
+ */
+ * @author amol
+ *
+ */
+public class StopWordsImpl {
+
+	/**
+	 * 
+	 */
+	public StopWordsImpl() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

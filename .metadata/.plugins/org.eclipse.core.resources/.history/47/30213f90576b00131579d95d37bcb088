@@ -1,0 +1,76 @@
+/**
+ * 
+ */
+package com.indexing.inverted;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author amol
+ *
+ */
+public class Loader {
+	
+	
+	/*
+	 *  Variables
+	 */
+	
+	private List<File> lisyOfAllFiles = new ArrayList<File>();
+	
+	
+	/**
+	 *  Default Constructor
+	 */
+	public Loader() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public void load (File file)
+	{
+		/*
+		 * check if the file is null; else add the file to the list of files that are to be parsed.
+		 */
+		if(file == null)
+		{
+			return;
+		}
+		
+		else if(file.isFile())
+		{
+			lisyOfAllFiles.add(file);
+		}
+	}
+	
+	
+	/**
+	 * depth search
+	 * 
+	 * @param dir
+	 */
+	private void discoverFiles(File dir) {
+		if (dir == null || dir.isFile())
+			return;
+
+		File[] dirs = dir.listFiles(new FileFilter() {
+
+			@Override
+			public boolean accept(File file) {
+				if (file.isFile())
+					lisyOfAllFiles.add(file);
+				else if (file.getName().startsWith("."))
+					; // ignore
+				else if (file.isDirectory()) {
+					discoverFiles(file);
+				}
+
+				return false;
+			}
+		});
+	}
+	
+
+}

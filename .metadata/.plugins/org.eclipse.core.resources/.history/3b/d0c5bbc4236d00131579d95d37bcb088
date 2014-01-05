@@ -1,0 +1,190 @@
+/**
+ * 
+ */
+package com.indexing.inverted;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author amol
+ *
+ */
+public class Loader {
+	
+	
+	/*
+	 *  Variables
+	 */
+	
+	private List<File> listOfAllFilesToBeIndexed = new ArrayList<File>();
+	private StopWords ignore;
+	
+	/**
+	 *  Default Constructor
+	 */
+	public Loader() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	/*
+	 * Parameterized constructor to instantiate the stopwords
+	 */
+	
+	public void load (File file)
+	{
+		/*
+		 * check if the file is null; else add the file to the list of files that are to be parsed.
+		 */
+		if(file == null)
+		{
+			return;
+		}
+		
+		else if(file.isFile())
+		{
+			listOfAllFilesToBeIndexed.add(file);
+		}
+		
+		else
+		{
+			/*
+			 * Call a depth search method that finds files and add hem to the list of files
+			 */
+			discoverFiles(file);
+		}
+	}
+	
+	
+	/**
+	 * depth search
+	 * 
+	 * @param dir
+	 */
+	private void discoverFiles(File dir) 
+	{
+		if (dir == null || dir.isFile())
+			return;
+
+		File[] dirs = dir.listFiles
+				(new FileFilter() {
+
+			@Override
+			public boolean accept(File file) {
+				if (file.isFile())
+					listOfAllFilesToBeIndexed.add(file);
+				else if (file.getName().startsWith("."))
+					; // ignore
+				else if (file.isDirectory()) {
+					discoverFiles(file);
+				}
+
+				return false;
+			}
+		});
+	}
+	
+	
+	public void gatherData()
+	{
+		
+		/* 
+		 *  Parallel run the code to read through all the books and create the objects 
+		 *  of index and then use it to create the inverted index
+		 */
+		
+		// ArrayList<Document> r = new ArrayList<Document>(listOfAllFilesToBeIndexed.size());
+		
+		for (File file : listOfAllFilesToBeIndexed) {
+			BufferedReader rdr = null;
+			
+			
+			try
+			{
+				//open a file and close it in finally
+				rdr = new BufferedReader(new FileReader(file));
+				// create an index by reading the file line by line
+				String raw = rdr.readLine();
+				int lineNum = 0;
+				
+				
+				while (raw != null) {
+					if (lineNum < 25)
+					{
+						if(raw.startsWith("Title:")||raw.startsWith("Author:")||raw.startsWith("Release Date:")||raw.startsWith("Language:"))
+						{
+							String[] splitValues = raw.trim().split("[:\\[]");
+							String key = (String) splitValues[0];
+							String value = (String) splitValues[1].trim();
+							
+							if(key.equalsIgnoreCase("Title"))
+							{
+								bookEntity.setTitle(value);
+							}
+							if(key.equalsIgnoreCase("Author"))
+							{
+								bookEntity.setAuthor(value);
+							}
+							if(key.equalsIgnoreCase("Release Date"))
+							{
+								bookEntity.setReleaseDate(value);
+							}
+							if(key.equalsIgnoreCase("Language"))
+							{
+								bookEntity.setLanguage(value);
+							}
+						}
+						
+						lineNum++;
+			
+					}
+					
+					String[] parts = raw.trim().split("[\\s,\\.:;\\-#~\\(\\)\\?\\!\\&\\*\\\"\\/\\'\\`\\$]");
+
+					numWords += parts.length;
+					
+					for (String p : parts) {
+						if (!ignore.contains(p))
+						{
+							//System.out.println(p);
+							int temp = d.addKeyword(p, relPosition);
+							//System.out.println("Before Loop: "+eucdist);
+							if(temp>0)
+							eucdist = eucdist+((temp)*(temp)-((temp-1)*(temp-1)));
+							//System.out.println("After Loop: "+eucdist);
+						}
+						// location (word position) in document allows use to
+						// calculate strength by relative location and frequency
+						relPosition++;
+					}
+
+					raw = rdr.readLine();
+					
+				}
+				
+			}
+			catch (Exception ex) {
+				ex.printStackTrace();
+			} 
+			finally 
+			{
+				try 
+				{
+					if (rdr != null)
+						rdr.close();
+				} 
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}
+	}
+	
+
+}

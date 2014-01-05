@@ -1,0 +1,91 @@
+
+package com.indexing.stopwords;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.HashSet;
+
+/*
+ * 
+ * Words which have no place in this term-concept mapping are those which
+ * describe no concepts. The particle words of grammar, the, of, and ..., known
+ * in IR as stopwords, fall into this category. Stopwords can be useful for
+ * retrieval but only in searching for phrases (see
+ *  http://snowball.tartarus.org/texts/introduction.html)
+ * 
+ * Sources:
+ * <ul>
+ * <li>http://www.ranks.nl/resources/stopwords.html
+ * <li>http://www.lextek.com/manuals/onix/stopwords1.html
+ * </ul>
+ * 
+ *
+ * @author: The concept is learnt in CMPE-226(SJSU) under Prof. Gash 
+ * Implemented by: amol
+ *
+ */
+public final class StopWordsImpl implements StopWords{
+
+	/*
+	 * Variables
+	 */
+
+	private HashSet<String> list = new HashSet<String>();
+
+
+
+	/**
+	 * Default Constructor
+	 */
+	public StopWordsImpl() {
+		// TODO Auto-generated constructor stub
+	}
+
+
+	/*
+	 * Use the stpwords constructor to instantiate the stopwords file 
+	 */
+
+	public StopWordsImpl(File src) throws Exception {
+		init(src);
+	}
+
+
+	@Override
+	public void init(File file) throws Exception {
+		if (file == null)
+			return;
+
+		list.clear();
+
+		if (!file.exists())
+			throw new RuntimeException("File not found: " + file.getAbsolutePath());
+
+		BufferedReader rdr = null;
+		try {
+			rdr = new BufferedReader(new FileReader(file));
+			String raw = rdr.readLine();
+			while (raw != null) {
+				if (!raw.startsWith("#"))
+					list.add(raw.trim().toLowerCase());
+				raw = rdr.readLine();
+			}
+		} finally {
+			rdr.close();
+		}
+	}
+
+
+	@Override
+	public boolean contains(String word) {
+		if (word == null || word.trim().length() < 2)
+			return true;
+		else if (list != null)
+			return list.contains(word.trim().toLowerCase());
+		else
+			return false;
+	}
+
+
+}

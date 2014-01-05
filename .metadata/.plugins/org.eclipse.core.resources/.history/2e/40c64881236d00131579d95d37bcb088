@@ -1,0 +1,12 @@
+/**
+ * 
+ */
+package com.indexing.stopwords;
+
+/**
+ * @author amol
+ *
+ */
+public interface Stopwords {
+
+}
